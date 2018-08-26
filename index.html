@@ -141,53 +141,53 @@
         return newGen;
 	}
     
-    // Buttons for Evolution
-    var x;
-    var genNum = 0;
+	// Buttons for Evolution
+	var x;
+	var genNum = 0;
     
-    function B1() {
-    	x = createPopulation(10);
-        document.getElementById('create').style.display = 'none';
-        document.getElementById('score').disabled = false;
-    }
+	function B1() {
+		x = createPopulation(10);
+		document.getElementById('create').style.display = 'none';
+		document.getElementById('score').disabled = false;
+	}
     
-    function B2() {
-    	x = scorePopulation(x);
-        document.getElementById('score').disabled = true;
-        document.getElementById('kill').disabled = false;
-    }
+	function B2() {
+		x = scorePopulation(x);
+		document.getElementById('score').disabled = true;
+		document.getElementById('kill').disabled = false;
+	}
     
-    function B3() {
-    	x = killWeak(x, 0.8, 0.5);
-        document.getElementById('kill').disabled = true;
-        document.getElementById('babies').disabled = false;
-    }
+	function B3() {
+		x = killWeak(x, 0.8, 0.5);
+		document.getElementById('kill').disabled = true;
+		document.getElementById('babies').disabled = false;
+	}
     
-    function B4() {
-    	x = makeBabies(x, 0.1);
-        document.getElementById('babies').disabled = true;
-        document.getElementById('new').disabled = false;
-    }
+	function B4() {
+		x = makeBabies(x, 0.1);
+		document.getElementById('babies').disabled = true;
+		document.getElementById('new').disabled = false;
+	}
     
-    function B5() {
-    	clearText();
-        genNum += 1;
-        for (let i = 0; i < x.length; i++) {
+	function B5() {
+		clearText();
+		genNum += 1;
+		for (let i = 0; i < x.length; i++) {
 			document.getElementById('individuals').innerHTML += '['+x[i]+'] &nbsp&nbsp';
 		}
-        document.getElementById('genNum').innerHTML = genNum;
-        document.getElementById('new').disabled = true;
-        document.getElementById('score').disabled = false;
-    }
+		document.getElementById('genNum').innerHTML = genNum;
+		document.getElementById('new').disabled = true;
+		document.getElementById('score').disabled = false;
+	}
     
-    function clearText() {
-    	document.getElementById('individuals').innerHTML = '';
-        document.getElementById('scored').innerHTML = '';
-        document.getElementById('fitness').innerHTML = '';
-        document.getElementById('survivors').innerHTML = '';
-        document.getElementById('children').innerHTML = '';
-    }
-    
+	function clearText() {
+		document.getElementById('individuals').innerHTML = '';
+		document.getElementById('scored').innerHTML = '';
+		document.getElementById('fitness').innerHTML = '';
+		document.getElementById('survivors').innerHTML = '';
+		document.getElementById('children').innerHTML = '';
+	}
+
 </script>
 
 </body>
