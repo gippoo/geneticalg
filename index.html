@@ -91,7 +91,7 @@
 			score += parseFloat(bobas[individual[i]-1].cost);
 		}
 		score = parseFloat(score.toFixed(2));
-		document.getElementById('fitness').innerHTML = '$' + score;
+		document.getElementById('fitness').innerHTML = '$' + score.toFixed(2);
 		return score;
 		}
     
