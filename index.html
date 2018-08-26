@@ -153,7 +153,7 @@
 			}
 			newGen.push(child);
 		}
-		for (let i = 0; i < newGen.length; i++) {
+		for (let i = parents.length; i < newGen.length; i++) {
 			document.getElementById('children').innerHTML += '['+newGen[i]+'] &nbsp&nbsp';
 		}
 		return newGen;
