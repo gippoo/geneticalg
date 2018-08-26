@@ -41,6 +41,7 @@
 	for (let i = 1; i <= 9; i++) {
 		document.getElementById('cost'+i).innerHTML = '$'+bobas[i-1].cost;
 	}
+	
 	// Evolution functions
 	function createIndividual() {
 		let c1 = Math.floor(Math.random() * 9) + 1;
@@ -50,36 +51,38 @@
         let c5 = Math.floor(Math.random() * 9) + 1;
 		return [c1,c2,c3,c4,c5];
 	}
+	
 	function createPopulation(size) {
 		let newpop = [];
 		for (let i = 0; i < size; i++) {
 			newpop[i] = createIndividual();
 		}
-        for (let i = 0; i < newpop.length; i++) {
+		for (let i = 0; i < newpop.length; i++) {
 			document.getElementById('individuals').innerHTML += '['+newpop[i]+'] &nbsp&nbsp';
 		}
-	return newpop;
+		return newpop;
 	}
+	
 	function scoreIndiv(indiv) {
 		let total = 0;
 		for (let i = 0; i < 5; i++) {
 			total += parseFloat(bobas[indiv[i]-1].cost);
 		}
-        if (total > 20) {
-        	return Math.abs(20 - total) * 20;
-        } else {
+		if (total > 20) {
+			return Math.abs(20 - total) * 20;
+		} else {
 			return Math.abs(20 - total);
-        }
+		}
 	}
     
-    function fitness(individual) {
-    	let score = 0;
-    	for (let i = 0; i < individual.length; i++) {
-        	score += parseFloat(bobas[individual[i]-1].cost);
-        }
-        document.getElementById('fitness').innerHTML = '$' + score.toFixed(2);
-        return score;
-    }
+	function fitness(individual) {
+		let score = 0;
+		for (let i = 0; i < individual.length; i++) {
+			score += parseFloat(bobas[individual[i]-1].cost);
+		}
+		document.getElementById('fitness').innerHTML = '$' + score.toFixed(2);
+		return score;
+		}
     
 	function scorePopulation(pop) {
 		let scoredPop = [];
@@ -96,17 +99,17 @@
 		for (let i = 0; i < scoredPop.length; i++) {
 			document.getElementById('scored').innerHTML += '['+scoredPop[i]+'] &nbsp&nbsp';
 		}
-        fitness(scoredPop[0]);
+		fitness(scoredPop[0]);
 		return scoredPop;
 	}
 	
 	function killWeak(pop, percent, luckRate) {
 		let survivors = Array.from(pop.slice(0,Math.ceil(pop.length * (1-percent))));
-        for (let i = Math.ceil(pop.length * (1-percent)); i < pop.slice(Math.ceil(pop.length * (1-percent)), 10).length; i ++) {
-        	if (Math.random() < luckRate) {
-            	survivors.push(pop[i]);
-            }
-        }
+		for (let i = Math.ceil(pop.length * (1-percent)); i < pop.slice(Math.ceil(pop.length * (1-percent)), 10).length; i ++) {
+			if (Math.random() < luckRate) {
+				survivors.push(pop[i]);
+			}
+		}
 		for (let i = 0; i < survivors.length; i++) {
 			document.getElementById('survivors').innerHTML += '['+survivors[i]+'] &nbsp&nbsp';
 		}
@@ -114,8 +117,8 @@
 	}
     
 	function makeBabies(parents, mutationRate) {
-    	let newGen = Array.from(parents);
-        while (newGen.length < 10) {
+		let newGen = Array.from(parents);
+		while (newGen.length < 10) {
 			let p1 = Math.floor(Math.random() * parents.length);
 			let p2 = Math.floor(Math.random() * parents.length);
 			while (p1 == p2) {
@@ -129,16 +132,15 @@
 			for (let i = cutoff; i < 5; i++) {
 				child[i] = parents[p2][i];
 			}
-            if (Math.random() < mutationRate) {
-            	child = createIndividual();
-            }
-            
+			if (Math.random() < mutationRate) {
+				child = createIndividual();
+			}
 			newGen.push(child);
-        }
-        for (let i = 0; i < newGen.length; i++) {
+		}
+		for (let i = 0; i < newGen.length; i++) {
 			document.getElementById('children').innerHTML += '['+newGen[i]+'] &nbsp&nbsp';
-	}
-        return newGen;
+		}
+		return newGen;
 	}
     
 	// Buttons for Evolution
