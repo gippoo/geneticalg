@@ -27,12 +27,14 @@
 <button id='kill' onclick='B3()' disabled = true>Kill Weak</button>
 <button id='babies' onclick='B4()' disabled = true>Make Babies</button>
 <button id='new' onclick='B5()' disabled = true>Start Next Cycle</button>
+<button id='auto' onclick='autoEvolve(25)'>Skip 25 Generations</button>
 <h3>Generation <span id='genNum'>0</span></h3>
 <p>Starting Population: <span id='individuals'></span></p>
 <p>Sorted by Fitness: <span id='scored'></span></p>
 <p>Top Fitness: <span id='fitness'></span></p>
 <p>Survivors: <span id='survivors'></span></p>
 <p>Children: <span id='children'></span></p>
+<h4>Best Individual: <span id='best'></span></h4>
 <p><i>Refresh the page to re-randomize the drink prices and start from a brand new generation 0</i></p>
 
 
@@ -89,7 +91,7 @@
 			score += parseFloat(bobas[individual[i]-1].cost);
 		}
 		document.getElementById('fitness').innerHTML = '$' + score.toFixed(2);
-		return score;
+		return score.toFixed(2);
 		}
     
 	function scorePopulation(pop) {
@@ -107,7 +109,11 @@
 		for (let i = 0; i < scoredPop.length; i++) {
 			document.getElementById('scored').innerHTML += '['+scoredPop[i]+'] &nbsp&nbsp';
 		}
-		fitness(scoredPop[0]);
+		if (fitness(scoredPop[0]) != bestFitness) {
+			bestFitness = fitness(scoredPop[0]);
+			bestGenNum = genNum;
+		}
+		document.getElementById('best').innerHTML = '['+scoredPop[0]+']<br> Total: $' + bestFitness.toFixed(2) + '<br>Generation: ' + bestGenNum;
 		return scoredPop;
 	}
 	
@@ -154,17 +160,21 @@
 	// Buttons for Evolution
 	var x;
 	var genNum = 0;
+	var bestFitness = 1000;
+	var bestGenNum;
     
 	function B1() {
 		x = createPopulation(10);
 		document.getElementById('create').style.display = 'none';
 		document.getElementById('score').disabled = false;
+		document.getElementById('auto').disabled = false;
 	}
     
 	function B2() {
 		x = scorePopulation(x);
 		document.getElementById('score').disabled = true;
 		document.getElementById('kill').disabled = false;
+		document.getElementById('auto').disabled = true;
 	}
     
 	function B3() {
@@ -188,6 +198,7 @@
 		document.getElementById('genNum').innerHTML = genNum;
 		document.getElementById('new').disabled = true;
 		document.getElementById('score').disabled = false;
+		document.getElementById('auto').disabled = false;
 	}
     
 	function clearText() {
@@ -196,6 +207,15 @@
 		document.getElementById('fitness').innerHTML = '';
 		document.getElementById('survivors').innerHTML = '';
 		document.getElementById('children').innerHTML = '';
+	}
+	
+	function autoevolve(gens) {
+		for (let i = 0; i < gens; i++) {
+			B2();
+			B3();
+			B4();
+			B5();
+		}
 	}
 
 </script>
