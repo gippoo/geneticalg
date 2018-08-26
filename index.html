@@ -90,7 +90,8 @@
 		for (let i = 0; i < individual.length; i++) {
 			score += parseFloat(bobas[individual[i]-1].cost);
 		}
-		document.getElementById('fitness').innerHTML = '$' + score.toFixed(2);
+		score = parseFloat(score.toFixed(2));
+		document.getElementById('fitness').innerHTML = '$' + score;
 		return score;
 		}
     
