@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Genetic Algorithm Example... w/ Milk Tea!</h1>
+<h2>Drink Menu</h2>
+<hr>
+<p>Boba 1... <span id=cost1></span></p>
+<p>Boba 2... <span id=cost2></span></p>
+<p>Boba 3... <span id=cost3></span></p>
+<p>Boba 4... <span id=cost4></span></p>
+<p>Boba 5... <span id=cost5></span></p>
+<p>Boba 6... <span id=cost6></span></p>
+<p>Boba 7... <span id=cost7></span></p>
+<p>Boba 8... <span id=cost8></span></p>
+<p>Boba 9... <span id=cost9></span></p>
+<hr>
+<h2>Evolution</h2>
+<button id='create' onclick='B1()'>Create Initial Population</button>
+<button id='score' onclick='B2()' disabled = true>Rank by Fitness</button>
+<button id='kill' onclick='B3()' disabled = true>Kill Weak</button>
+<button id='babies' onclick='B4()' disabled = true>Make Babies</button>
+<button id='new' onclick='B5()' disabled = true>Start Next Cycle</button>
+<h3>Generation <span id='genNum'>0</span></h3>
+<p>Starting Population: <span id='individuals'></span></p>
+<p>Sorted by Fitness: <span id='scored'></span></p>
+<p>Top Fitness: <span id='fitness'></span></p>
+<p>Survivors: <span id='survivors'></span></p>
+<p>Children: <span id='children'></span></p>
+
+
+<script>
+	var bobas = [];
+	var boba = function() {
+		this.cost = (Math.random() * 5 + 1).toFixed(2);
+	}
+	
+	// Show menu with prices
+	for (let i = 0; i < 9; i++) {
+		bobas[i] = new boba();
+	}
+	for (let i = 1; i <= 9; i++) {
+		document.getElementById('cost'+i).innerHTML = '$'+bobas[i-1].cost;
+	}
+	// Evolution functions
+	function createIndividual() {
+		let c1 = Math.floor(Math.random() * 9) + 1;
+		let c2 = Math.floor(Math.random() * 9) + 1;
+		let c3 = Math.floor(Math.random() * 9) + 1;
+        let c4 = Math.floor(Math.random() * 9) + 1;
+        let c5 = Math.floor(Math.random() * 9) + 1;
+		return [c1,c2,c3,c4,c5];
+	}
+	function createPopulation(size) {
+		let newpop = [];
+		for (let i = 0; i < size; i++) {
+			newpop[i] = createIndividual();
+		}
+        for (let i = 0; i < newpop.length; i++) {
+			document.getElementById('individuals').innerHTML += '['+newpop[i]+'] &nbsp&nbsp';
+		}
+	return newpop;
+	}
+	function scoreIndiv(indiv) {
+		let total = 0;
+		for (let i = 0; i < 5; i++) {
+			total += parseFloat(bobas[indiv[i]-1].cost);
+		}
+        if (total > 20) {
+        	return Math.abs(20 - total) * 20;
+        } else {
+			return Math.abs(20 - total);
+        }
+	}
+    
+    function fitness(individual) {
+    	let score = 0;
+    	for (let i = 0; i < individual.length; i++) {
+        	score += parseFloat(bobas[individual[i]-1].cost);
+        }
+        document.getElementById('fitness').innerHTML = '$' + score.toFixed(2);
+        return score;
+    }
+    
+	function scorePopulation(pop) {
+		let scoredPop = [];
+		for (let i = 0; i < pop.length; i++) {
+			scoredPop[i] = pop[i];
+			scoredPop[i][5] = scoreIndiv(pop[i]);
+			scoredPop[i].reverse();
+		}
+		scoredPop.sort();
+		for (let i = 0; i < scoredPop.length; i++) {
+			scoredPop[i].shift()
+			scoredPop[i].reverse();
+		}
+		for (let i = 0; i < scoredPop.length; i++) {
+			document.getElementById('scored').innerHTML += '['+scoredPop[i]+'] &nbsp&nbsp';
+		}
+        fitness(scoredPop[0]);
+		return scoredPop;
+	}
+	
+	function killWeak(pop, percent, luckRate) {
+		let survivors = Array.from(pop.slice(0,Math.ceil(pop.length * (1-percent))));
+        for (let i = Math.ceil(pop.length * (1-percent)); i < pop.slice(Math.ceil(pop.length * (1-percent)), 10).length; i ++) {
+        	if (Math.random() < luckRate) {
+            	survivors.push(pop[i]);
+            }
+        }
+		for (let i = 0; i < survivors.length; i++) {
+			document.getElementById('survivors').innerHTML += '['+survivors[i]+'] &nbsp&nbsp';
+		}
+		return survivors;
+	}
+    
+	function makeBabies(parents, mutationRate) {
+    	let newGen = Array.from(parents);
+        while (newGen.length < 10) {
+			let p1 = Math.floor(Math.random() * parents.length);
+			let p2 = Math.floor(Math.random() * parents.length);
+			while (p1 == p2) {
+				p2 = Math.floor(Math.random() * parents.length);
+			}
+			let cutoff = Math.floor(Math.random() * 4) + 1;
+			let child = [];
+			for (let i = 0; i < cutoff; i++) {
+				child[i] = parents[p1][i];
+			}
+			for (let i = cutoff; i < 5; i++) {
+				child[i] = parents[p2][i];
+			}
+            if (Math.random() < mutationRate) {
+            	child = createIndividual();
+            }
+            
+			newGen.push(child);
+        }
+        for (let i = 0; i < newGen.length; i++) {
+			document.getElementById('children').innerHTML += '['+newGen[i]+'] &nbsp&nbsp';
+	}
+        return newGen;
+	}
+    
+    // Buttons for Evolution
+    var x;
+    var genNum = 0;
+    
+    function B1() {
+    	x = createPopulation(10);
+        document.getElementById('create').style.display = 'none';
+        document.getElementById('score').disabled = false;
+    }
+    
+    function B2() {
+    	x = scorePopulation(x);
+        document.getElementById('score').disabled = true;
+        document.getElementById('kill').disabled = false;
+    }
+    
+    function B3() {
+    	x = killWeak(x, 0.8, 0.5);
+        document.getElementById('kill').disabled = true;
+        document.getElementById('babies').disabled = false;
+    }
+    
+    function B4() {
+    	x = makeBabies(x, 0.1);
+        document.getElementById('babies').disabled = true;
+        document.getElementById('new').disabled = false;
+    }
+    
+    function B5() {
+    	clearText();
+        genNum += 1;
+        for (let i = 0; i < x.length; i++) {
+			document.getElementById('individuals').innerHTML += '['+x[i]+'] &nbsp&nbsp';
+		}
+        document.getElementById('genNum').innerHTML = genNum;
+        document.getElementById('new').disabled = true;
+        document.getElementById('score').disabled = false;
+    }
+    
+    function clearText() {
+    	document.getElementById('individuals').innerHTML = '';
+        document.getElementById('scored').innerHTML = '';
+        document.getElementById('fitness').innerHTML = '';
+        document.getElementById('survivors').innerHTML = '';
+        document.getElementById('children').innerHTML = '';
+    }
+    
+</script>
+
+</body>
+</html>
