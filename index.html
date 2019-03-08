@@ -18,11 +18,11 @@
 <hr>
 <h2>Evolution</h2>
 <p>-First create an initial population of 10 individuals. Each individual is a list of 5 drinks generated randomly.<br>
--Then sort these idividuals by fitness. The closer the total cost of the drinks is to $20, the more fit the individual is. There is a penalty for going over $20.<br>
+-Then sort these individuals by fitness. The closer the total cost of the drinks is to $20, the more fit the individual is. There is a penalty for going over $20.<br>
 -You can see the total cost of the best performing individual as well as the generation it was born in.<br>
 -Then kill off the bottom 8 individuals. Some of them might get lucky (50% chance) and survive.<br>
 -These survivors serve as the parents for the next generation. Have them make babies. Random pairs of individuals will get together and make a baby that inherits part of each parent's list. There is a small chance (20%) of mutation where the baby's list gets altered completely randomly.<br>
--The population gets refilled to a size of 10 and repeat the process.
+-The population gets refilled to a size of 10 and the process repeats.
 </p>
 <button id='create' onclick='B1()'>Create Initial Population</button><br>
 <button id='score' onclick='B2()' disabled = true>Rank by Fitness</button>
